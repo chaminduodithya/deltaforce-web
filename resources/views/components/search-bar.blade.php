@@ -7,7 +7,7 @@
             placeholder="Search loadouts or weapons…"
             class="df-input"
         >
-        <button type="submit" class="df-btn-secondary min-h-0 px-3 py-2">Search</button>
+        <button type="submit" class="df-btn-secondary px-3">Search</button>
     </div>
 </form>
 

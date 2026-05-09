@@ -14,7 +14,10 @@
     </head>
     <body class="font-sans text-slate-100 antialiased">
         <div class="df-main-shell flex min-h-screen flex-col items-center justify-center bg-tactical-bg px-4">
-            <a href="{{ route('home') }}" class="df-title rounded-md px-1 text-3xl font-bold text-tactical-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tactical-accent">DELTA FORCE HUB</a>
+            <a href="{{ route('home') }}" class="df-title inline-flex items-center gap-3 rounded-md px-1 text-3xl font-bold text-tactical-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tactical-accent">
+                <img src="{{ asset('images/deltaforce-logo.avif') }}" alt="" aria-hidden="true" class="h-11 w-11 object-contain" width="88" height="88">
+                <span>DELTA FORCE HUB</span>
+            </a>
 
             <div class="df-panel mt-6 w-full max-w-md px-6 py-6 shadow-xl">
                 {{ $slot }}

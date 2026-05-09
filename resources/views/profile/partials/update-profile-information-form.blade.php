@@ -47,6 +47,24 @@
             @endif
         </div>
 
+        <div>
+            <x-input-label for="preferred_platform" :value="__('Preferred Platform')" />
+            <select id="preferred_platform" name="preferred_platform" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option value="pc" @selected(old('preferred_platform', $user->preferred_platform ?? 'pc') === 'pc')>PC</option>
+                <option value="mobile" @selected(old('preferred_platform', $user->preferred_platform ?? 'pc') === 'mobile')>Mobile</option>
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('preferred_platform')" />
+        </div>
+
+        <div>
+            <x-input-label for="preferred_server_region" :value="__('Preferred Server')" />
+            <select id="preferred_server_region" name="preferred_server_region" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option value="timi" @selected(old('preferred_server_region', $user->preferred_server_region ?? 'garena') === 'timi')>Global (TiMi)</option>
+                <option value="garena" @selected(old('preferred_server_region', $user->preferred_server_region ?? 'garena') === 'garena')>Garena</option>
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('preferred_server_region')" />
+        </div>
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 

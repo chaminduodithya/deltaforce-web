@@ -6,9 +6,9 @@
     --df-bg: #070b11;
     --df-panel: #0f1620;
     --df-line: #2d3f53;
-    --df-accent: #f59e0b;
+    --df-accent: #e6b800;
     --df-accent-2: #22c55e;
-    --df-glow: rgba(245, 158, 11, 0.18);
+    --df-glow: rgba(230, 184, 0, 0.18);
 }
 
 html {
@@ -20,7 +20,7 @@ body {
     line-height: 1.55;
     background-image:
         radial-gradient(circle at 15% 15%, rgba(34, 197, 94, 0.14), transparent 35%),
-        radial-gradient(circle at 82% 8%, rgba(245, 158, 11, 0.16), transparent 32%),
+        radial-gradient(circle at 82% 8%, rgba(230, 184, 0, 0.16), transparent 32%),
         linear-gradient(180deg, #070b11 0%, #0b0f14 55%, #070b11 100%);
 }
 
@@ -46,7 +46,7 @@ body::before {
 }
 
 .df-chip {
-    @apply inline-flex items-center rounded-full border border-tactical-line px-2.5 py-1 text-xs uppercase tracking-wide text-slate-200;
+    @apply inline-flex items-center rounded-full border border-tactical-line px-2.5 py-1 text-xs uppercase tracking-wide text-slate-200 transition-colors duration-200;
 }
 
 .df-title {
@@ -62,11 +62,12 @@ body::before {
 }
 
 .df-btn-primary {
-    @apply inline-flex min-h-11 cursor-pointer items-center justify-center rounded-lg border border-tactical-accent bg-tactical-accent/15 px-4 py-2 text-sm font-medium uppercase tracking-wide text-tactical-accent transition-colors duration-200 hover:bg-tactical-accent hover:text-slate-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tactical-accent;
+    @apply inline-flex min-h-11 cursor-pointer items-center justify-center rounded-lg border border-tactical-accent bg-tactical-accent/15 px-4 py-2 text-sm font-medium uppercase tracking-wide text-tactical-accent transition-all duration-200 hover:-translate-y-0.5 hover:bg-tactical-accent hover:text-slate-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tactical-accent;
+    box-shadow: 0 0 0 rgba(230, 184, 0, 0);
 }
 
 .df-btn-secondary {
-    @apply inline-flex min-h-11 cursor-pointer items-center justify-center rounded-lg border border-tactical-line bg-slate-950/45 px-4 py-2 text-sm font-medium uppercase tracking-wide text-slate-200 transition-colors duration-200 hover:border-tactical-accent hover:text-tactical-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tactical-accent;
+    @apply inline-flex min-h-11 cursor-pointer items-center justify-center rounded-lg border border-tactical-line bg-slate-950/45 px-4 py-2 text-sm font-medium uppercase tracking-wide text-slate-200 transition-all duration-200 hover:-translate-y-0.5 hover:border-tactical-accent hover:text-tactical-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tactical-accent;
 }
 
 .df-input {
@@ -74,7 +75,19 @@ body::before {
 }
 
 .df-card-link {
-    @apply cursor-pointer transition-colors duration-200 hover:border-tactical-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tactical-accent;
+    @apply cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-tactical-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tactical-accent;
+}
+
+.df-badge {
+    @apply rounded-md border px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide;
+}
+
+.df-badge-platform {
+    @apply border-cyan-400/30 bg-cyan-500/10 text-cyan-200;
+}
+
+.df-badge-server {
+    @apply border-emerald-400/30 bg-emerald-500/10 text-emerald-200;
 }
 
 .df-hero-media {
@@ -132,13 +145,184 @@ body::before {
     @apply text-tactical-accent;
 }
 
+.df-btn-primary:hover {
+    box-shadow: 0 8px 20px -12px rgba(230, 184, 0, 0.6);
+}
+
 ::-webkit-scrollbar {
     width: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(245, 158, 11, 0.35);
+    background: rgba(230, 184, 0, 0.35);
     border-radius: 9999px;
+}
+
+/* Hero Section */
+.hero-section {
+    min-height: 600px;
+}
+
+.hero-background {
+    background: linear-gradient(135deg, #070b11 0%, #0f1620 100%);
+}
+
+.hero-overlay {
+    background: linear-gradient(
+        135deg,
+        rgba(7, 11, 17, 0.75) 0%,
+        rgba(7, 11, 17, 0.65) 35%,
+        rgba(15, 22, 32, 0.55) 100%
+    );
+}
+
+.scanlines {
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(148, 163, 184, 0.02) 0,
+        rgba(148, 163, 184, 0.02) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    opacity: 0.25;
+}
+
+.hero-headline {
+    letter-spacing: -2px;
+    text-shadow: 0 8px 32px rgba(230, 184, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.8);
+    animation: heroGlow 900ms ease-out 1;
+}
+
+@keyframes heroGlow {
+    0%, 100% { text-shadow: 0 8px 32px rgba(230, 184, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.8); }
+    50% { text-shadow: 0 8px 32px rgba(230, 184, 0, 0.25), 0 4px 16px rgba(0, 0, 0, 0.8); }
+}
+
+.hero-content {
+    animation: slideInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Feature Cards */
+.feature-card {
+    @apply rounded-lg border border-tactical-line bg-tactical-panel/50 p-6 backdrop-blur transition-all duration-300 hover:border-tactical-accent hover:bg-tactical-panel/80;
+}
+
+.feature-card:hover {
+    box-shadow: 0 0 24px rgba(230, 184, 0, 0.12), inset 0 1px 0 rgba(148, 163, 184, 0.12);
+}
+
+/* Mode Selection Hub */
+.mode-panel {
+    @apply relative block;
+}
+
+.mode-overlay {
+    background: linear-gradient(
+        135deg,
+        rgba(7, 11, 17, 0.85) 0%,
+        rgba(15, 22, 32, 0.75) 50%,
+        rgba(7, 11, 17, 0.85) 100%
+    );
+}
+
+.mode-warfare .mode-overlay {
+    @apply group-hover:via-amber-600/15;
+}
+
+.mode-operations .mode-overlay {
+    @apply group-hover:via-cyan-400/15;
+}
+
+.mode-title {
+    font-size: clamp(2rem, 8vw, 3.5rem);
+}
+
+.mode-subtitle {
+    font-size: clamp(0.875rem, 2vw, 1.125rem);
+}
+
+.mode-content {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0.8; }
+    to { opacity: 1; }
+}
+
+/* Armory Cards */
+.armory-card {
+    @apply block rounded-lg border border-tactical-line bg-tactical-panel/50 backdrop-blur transition-all duration-300 hover:border-tactical-accent hover:bg-tactical-panel/80;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.armory-card:hover {
+    box-shadow: 0 8px 24px rgba(230, 184, 0, 0.12), inset 0 1px 0 rgba(148, 163, 184, 0.08);
+    transform: translateY(-2px);
+}
+
+/* Outline Button Style */
+.df-btn-outline {
+    @apply inline-flex min-h-11 cursor-pointer items-center justify-center rounded-lg border border-tactical-accent bg-transparent px-4 py-2 text-sm font-medium uppercase tracking-wide text-tactical-accent transition-all duration-200 hover:-translate-y-0.5 hover:bg-tactical-accent hover:text-slate-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tactical-accent;
+}
+
+/* Footer CTA */
+.footer-cta {
+    border-top: 1px solid var(--df-line);
+}
+
+/* Motion system: scroll reveals + staggered delays */
+.js [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+    transition:
+        opacity 280ms ease-out,
+        transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: opacity, transform;
+}
+
+.js [data-reveal='left'] {
+    transform: translate3d(-14px, 0, 0);
+}
+
+.js [data-reveal='right'] {
+    transform: translate3d(14px, 0, 0);
+}
+
+.js [data-reveal='zoom'] {
+    transform: scale(0.985);
+}
+
+.js [data-reveal].is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+}
+
+.reveal-delay-1 {
+    transition-delay: 60ms;
+}
+
+.reveal-delay-2 {
+    transition-delay: 120ms;
+}
+
+.reveal-delay-3 {
+    transition-delay: 180ms;
+}
+
+.reveal-delay-4 {
+    transition-delay: 240ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -147,6 +331,12 @@ body::before {
         animation-iteration-count: 1 !important;
         transition-duration: 0.001ms !important;
         scroll-behavior: auto !important;
+    }
+
+    .js [data-reveal] {
+        opacity: 1 !important;
+        transform: none !important;
+        transition-delay: 0ms !important;
     }
 }
 

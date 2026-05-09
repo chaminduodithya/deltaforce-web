@@ -21,7 +21,7 @@ export default {
                     panel: '#111a23',
                     muted: '#1b2a39',
                     line: '#2f455a',
-                    accent: '#f59e0b',
+                    accent: '#e6b800',
                     warfare: '#22c55e',
                     operations: '#f97316',
                 },
@@ -32,8 +32,8 @@ export default {
                     '100%': { opacity: '1', transform: 'translateY(0)' },
                 },
                 'pulse-glow': {
-                    '0%, 100%': { boxShadow: '0 0 0 rgba(245, 158, 11, 0)' },
-                    '50%': { boxShadow: '0 0 18px rgba(245, 158, 11, 0.3)' },
+                    '0%, 100%': { boxShadow: '0 0 0 rgba(230, 184, 0, 0)' },
+                    '50%': { boxShadow: '0 0 18px rgba(230, 184, 0, 0.3)' },
                 },
             },
             animation: {

@@ -26,6 +26,8 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            'preferred_platform' => ['required', Rule::in(['pc', 'mobile'])],
+            'preferred_server_region' => ['required', Rule::in(['garena', 'timi'])],
         ];
     }
 }

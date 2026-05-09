@@ -17,10 +17,63 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 Route::get('/', function () {
+    $platforms = ['pc' => 'PC', 'mobile' => 'Mobile'];
+    $servers = ['garena' => 'Garena', 'timi' => 'Global (TiMi)'];
+    $activePlatform = request()->exists('platform') ? request('platform') : auth()->user()?->preferred_platform;
+    $activeServer = request()->exists('server') ? request('server') : auth()->user()?->preferred_server_region;
+
+    $applyContext = fn (Builder $query): Builder => $query
+        ->when($activePlatform, fn (Builder $inner): Builder => $inner->where('platform', $activePlatform))
+        ->when($activeServer, fn (Builder $inner): Builder => $inner->where('server_region', $activeServer));
+
+    $trending = $applyContext(Loadout::query()->published()->trending())
+        ->with(['primaryWeapon', 'gameMode', 'user'])
+        ->take(8)
+        ->get();
+
+    $metaWeapons = $trending->pluck('primaryWeapon.name')->filter()->unique()->take(2)->values();
+    $currentMeta = $metaWeapons->count() === 2
+        ? "{$metaWeapons[0]} & {$metaWeapons[1]}"
+        : ($metaWeapons->first() ?? 'SG552 & SMG-45');
+
+    $topContributorId = Loadout::query()
+        ->published()
+        ->when($activePlatform, fn (Builder $query): Builder => $query->where('platform', $activePlatform))
+        ->when($activeServer, fn (Builder $query): Builder => $query->where('server_region', $activeServer))
+        ->selectRaw('user_id, COUNT(*) as total')
+        ->groupBy('user_id')
+        ->orderByDesc('total')
+        ->value('user_id');
+
+    $topContributor = $topContributorId ? User::query()->find($topContributorId) : null;
+
+    $hotGun = Weapon::query()
+        ->select('weapons.name')
+        ->join('loadouts', 'loadouts.primary_weapon_id', '=', 'weapons.id')
+        ->where('loadouts.status', 'published')
+        ->when($activePlatform, fn ($query) => $query->where('loadouts.platform', $activePlatform))
+        ->when($activeServer, fn ($query) => $query->where('loadouts.server_region', $activeServer))
+        ->groupBy('weapons.id', 'weapons.name')
+        ->orderByRaw('SUM(loadouts.vote_score + loadouts.copies_count) DESC')
+        ->value('name');
+
     return view('pages.home', [
-        'trending' => Loadout::query()->published()->trending()->with(['primaryWeapon', 'gameMode', 'user'])->take(8)->get(),
-        'warfareHot' => Loadout::query()->published()->forMode('warfare')->popular()->with(['primaryWeapon', 'gameMode', 'user'])->take(4)->get(),
-        'operationsHot' => Loadout::query()->published()->forMode('operations')->popular()->with(['primaryWeapon', 'gameMode', 'user'])->take(4)->get(),
+        'trending' => $trending,
+        'warfareHot' => $applyContext(Loadout::query()->published()->forMode('warfare')->popular())->with(['primaryWeapon', 'gameMode', 'user'])->take(4)->get(),
+        'operationsHot' => $applyContext(Loadout::query()->published()->forMode('operations')->popular())->with(['primaryWeapon', 'gameMode', 'user'])->take(4)->get(),
+        'newcomerHot' => $applyContext(
+            Loadout::query()->published()->whereIn('playstyle', ['all_rounder', 'budget'])->popular()
+        )->with(['primaryWeapon', 'gameMode', 'user'])->take(4)->get(),
+        'currentMeta' => $currentMeta,
+        'activePlatform' => $activePlatform,
+        'activeServer' => $activeServer,
+        'platforms' => $platforms,
+        'servers' => $servers,
+        'sitrep' => [
+            'active_loadouts' => $applyContext(Loadout::query()->published())->count(),
+            'top_contributor' => $topContributor?->name ?? 'No Intel Yet',
+            'hot_gun' => $hotGun ?? 'No Intel Yet',
+        ],
         'stats' => [
             'loadouts' => Loadout::query()->count(),
             'users' => User::query()->count(),
@@ -32,7 +85,9 @@ Route::get('/', function () {
 
 Route::get('/loadouts', function () {
     $platforms = ['pc' => 'PC', 'mobile' => 'Mobile'];
-    $servers = ['garena' => 'Garena', 'timi' => 'Tencent TiMi'];
+    $servers = ['garena' => 'Garena', 'timi' => 'Global (TiMi)'];
+    $activePlatform = request()->exists('platform') ? request('platform') : auth()->user()?->preferred_platform;
+    $activeServer = request()->exists('server') ? request('server') : auth()->user()?->preferred_server_region;
 
     $query = Loadout::query()
         ->published()
@@ -54,12 +109,12 @@ Route::get('/loadouts', function () {
         $query->whereHas('gameMode', fn (Builder $gameMode): Builder => $gameMode->where('slug', $mode));
     }
 
-    if ($platform = request('platform')) {
-        $query->where('platform', $platform);
+    if ($activePlatform) {
+        $query->where('platform', $activePlatform);
     }
 
-    if ($server = request('server')) {
-        $query->where('server_region', $server);
+    if ($activeServer) {
+        $query->where('server_region', $activeServer);
     }
 
     match (request('sort', 'popular')) {
@@ -75,6 +130,8 @@ Route::get('/loadouts', function () {
         'modes' => GameMode::query()->orderBy('name')->get(),
         'platforms' => $platforms,
         'servers' => $servers,
+        'activePlatform' => $activePlatform,
+        'activeServer' => $activeServer,
     ]);
 })->name('loadouts.browse');
 
@@ -153,7 +210,7 @@ Route::middleware('auth')->group(function () {
             'secondaryWeapons' => Weapon::query()->where('is_secondary', true)->orderBy('name')->get(),
             'attachmentSlots' => AttachmentSlot::query()->with(['attachments' => fn ($query) => $query->orderBy('name')])->orderBy('display_order')->get(),
             'platforms' => ['pc' => 'PC', 'mobile' => 'Mobile'],
-            'servers' => ['garena' => 'Garena', 'timi' => 'Tencent TiMi'],
+            'servers' => ['garena' => 'Garena', 'timi' => 'Global (TiMi)'],
         ]);
     })->name('loadouts.create');
 

@@ -26,6 +26,8 @@ class User extends Authenticatable
         'email',
         'password',
         'bio',
+        'preferred_platform',
+        'preferred_server_region',
     ];
 
     /**

@@ -26,7 +26,7 @@
             <select name="platform" class="df-input">
                 <option value="">All</option>
                 @foreach ($platforms as $value => $label)
-                    <option value="{{ $value }}" @selected(request('platform') === $value)>{{ $label }}</option>
+                    <option value="{{ $value }}" @selected(($activePlatform ?? request('platform')) === $value)>{{ $label }}</option>
                 @endforeach
             </select>
         </label>
@@ -36,7 +36,7 @@
             <select name="server" class="df-input">
                 <option value="">All</option>
                 @foreach ($servers as $value => $label)
-                    <option value="{{ $value }}" @selected(request('server') === $value)>{{ $label }}</option>
+                    <option value="{{ $value }}" @selected(($activeServer ?? request('server')) === $value)>{{ $label }}</option>
                 @endforeach
             </select>
         </label>

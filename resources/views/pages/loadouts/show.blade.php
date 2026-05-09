@@ -22,8 +22,8 @@
                     <span>{{ $loadout->copies_count }} copies</span>
                 </div>
                 <div class="mt-3 flex flex-wrap gap-2 text-xs text-slate-300">
-                    <span class="rounded border border-tactical-line px-2 py-1">Platform: {{ strtoupper($loadout->platform ?? 'PC') }}</span>
-                    <span class="rounded border border-tactical-line px-2 py-1">Server: {{ strtoupper($loadout->server_region ?? 'GARENA') }}</span>
+                    <span class="df-badge df-badge-platform">Platform: {{ strtoupper($loadout->platform ?? 'PC') }}</span>
+                    <span class="df-badge df-badge-server">Server: {{ ($loadout->server_region ?? 'garena') === 'timi' ? 'GLOBAL (TIMI)' : 'GARENA' }}</span>
                 </div>
             </div>
 
@@ -49,6 +49,17 @@
             <div class="df-panel p-4">
                 <h3 class="df-title mb-2">Loadout Code</h3>
                 <pre class="overflow-x-auto rounded bg-slate-950/70 p-3 text-sm">{{ $loadout->loadout_code ?: 'No code provided' }}</pre>
+                <div class="mt-3 flex items-center gap-3">
+                    <button
+                        type="button"
+                        class="df-btn-primary min-h-0 px-3 py-1.5"
+                        @disabled(empty($loadout->loadout_code))
+                        onclick="navigator.clipboard.writeText({{ \Illuminate\Support\Js::from($loadout->loadout_code) }}).then(() => document.getElementById('copy-code-status').textContent = 'Code Copied').catch(() => document.getElementById('copy-code-status').textContent = 'Copy Failed')"
+                    >
+                        Copy Loadout Code
+                    </button>
+                    <span id="copy-code-status" class="text-xs text-slate-400" aria-live="polite"></span>
+                </div>
             </div>
             <div class="df-panel p-4">
                 <h3 class="df-title mb-2">Suggested Builds</h3>
@@ -68,7 +79,7 @@
                             </div>
                             <div class="mt-2 flex flex-wrap gap-1">
                                 @foreach ($suggestion['reasons'] as $reason)
-                                    <span class="rounded border border-tactical-line px-2 py-0.5 text-[11px] text-slate-300">{{ $reason }}</span>
+                                    <span class="rounded border border-tactical-line px-2 py-0.5 text-xs text-slate-300">{{ $reason }}</span>
                                 @endforeach
                             </div>
                         </article>

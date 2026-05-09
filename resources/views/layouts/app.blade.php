@@ -16,8 +16,9 @@
         <div class="df-main-shell min-h-screen">
             <header class="sticky top-0 z-30 border-b border-tactical-line bg-tactical-bg/90 backdrop-blur">
                 <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
-                    <a href="{{ route('home') }}" class="df-title rounded-md px-1 text-xl font-bold text-tactical-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tactical-accent">
-                        DELTA FORCE HUB
+                    <a href="{{ route('home') }}" class="df-title inline-flex items-center gap-2 rounded-md px-1 text-xl font-bold text-tactical-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tactical-accent">
+                        <img src="{{ asset('images/deltaforce-logo.avif') }}" alt="" aria-hidden="true" class="h-8 w-8 object-contain" width="64" height="64">
+                        <span>DELTA FORCE HUB</span>
                     </a>
                     <nav class="hidden items-center gap-6 text-sm md:flex">
                         <a class="df-nav-link" href="{{ route('home') }}">Home</a>
