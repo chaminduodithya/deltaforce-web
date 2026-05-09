@@ -13,6 +13,9 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
+        {{-- Skip-to-content (a11y) --}}
+        <a href="#main-content" class="df-skip-link">Skip to content</a>
+
         <div class="df-main-shell min-h-screen">
             <header class="sticky top-0 z-30 border-b border-tactical-line bg-tactical-bg/90 backdrop-blur">
                 <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
@@ -20,11 +23,11 @@
                         <img src="{{ asset('images/deltaforce-logo.avif') }}" alt="" aria-hidden="true" class="h-8 w-8 object-contain" width="64" height="64">
                         <span>DELTA FORCE HUB</span>
                     </a>
-                    <nav class="hidden items-center gap-6 text-sm md:flex">
-                        <a class="df-nav-link" href="{{ route('home') }}">Home</a>
-                        <a class="df-nav-link" href="{{ route('loadouts.browse') }}">Browse</a>
-                        <a class="df-nav-link" href="{{ route('loadouts.create') }}">Create</a>
-                        <a class="df-nav-link" href="{{ route('weapons.index') }}">Weapons</a>
+                    <nav class="hidden items-center gap-1 text-sm md:flex" aria-label="Main Navigation">
+                        <a class="df-nav-link {{ request()->routeIs('home') ? 'is-active' : '' }}" href="{{ route('home') }}">Home</a>
+                        <a class="df-nav-link {{ request()->routeIs('loadouts.browse') ? 'is-active' : '' }}" href="{{ route('loadouts.browse') }}">Browse</a>
+                        <a class="df-nav-link {{ request()->routeIs('loadouts.create') ? 'is-active' : '' }}" href="{{ route('loadouts.create') }}">Create</a>
+                        <a class="df-nav-link {{ request()->routeIs('weapons.*') ? 'is-active' : '' }}" href="{{ route('weapons.index') }}">Weapons</a>
                     </nav>
                     <div class="flex items-center gap-2 text-sm">
                         @auth
@@ -47,12 +50,37 @@
                 </div>
             @endisset
 
-            <main class="df-mobile-main mx-auto max-w-7xl px-4 py-6 sm:px-6">
+            <main id="main-content" class="df-mobile-main mx-auto max-w-7xl px-4 py-6 sm:px-6">
                 {{ $slot }}
             </main>
 
-            <footer class="border-t border-tactical-line py-5 text-center text-sm text-slate-400">
-                Built for the DF community.
+            <footer class="border-t border-tactical-line bg-tactical-bg/60 py-8">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6">
+                    <div class="grid gap-6 text-sm sm:grid-cols-3">
+                        <div>
+                            <h4 class="font-heading text-sm font-bold uppercase tracking-wider text-tactical-accent">Delta Force Hub</h4>
+                            <p class="mt-2 text-slate-400">The community platform for Delta Force weapon builds and loadout sharing.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-heading text-sm font-bold uppercase tracking-wider text-slate-300">Quick Links</h4>
+                            <ul class="mt-2 space-y-1.5 text-slate-400">
+                                <li><a href="{{ route('loadouts.browse') }}" class="transition-colors hover:text-tactical-accent">Browse Loadouts</a></li>
+                                <li><a href="{{ route('weapons.index') }}" class="transition-colors hover:text-tactical-accent">Weapons</a></li>
+                                <li><a href="{{ route('loadouts.create') }}" class="transition-colors hover:text-tactical-accent">Create Build</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-heading text-sm font-bold uppercase tracking-wider text-slate-300">Community</h4>
+                            <ul class="mt-2 space-y-1.5 text-slate-400">
+                                <li><a href="{{ route('register') }}" class="transition-colors hover:text-tactical-accent">Join Now</a></li>
+                                <li><a href="{{ route('login') }}" class="transition-colors hover:text-tactical-accent">Sign In</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mt-6 border-t border-tactical-line pt-4 text-center text-xs text-slate-500">
+                        Built for the DF community. Not affiliated with TiMi Studios or Garena.
+                    </div>
+                </div>
             </footer>
 
             <nav class="df-mobile-nav" aria-label="Mobile Navigation">
@@ -84,5 +112,8 @@
                 </div>
             </nav>
         </div>
+
+        {{-- Toast container --}}
+        <div id="df-toast-container" class="df-toast-container" aria-live="polite"></div>
     </body>
 </html>

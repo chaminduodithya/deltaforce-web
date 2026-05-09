@@ -35,10 +35,25 @@ export default {
                     '0%, 100%': { boxShadow: '0 0 0 rgba(230, 184, 0, 0)' },
                     '50%': { boxShadow: '0 0 18px rgba(230, 184, 0, 0.3)' },
                 },
+                'toast-in': {
+                    '0%': { opacity: '0', transform: 'translateY(12px) scale(0.95)' },
+                    '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+                },
+                'toast-out': {
+                    '0%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+                    '100%': { opacity: '0', transform: 'translateY(12px) scale(0.95)' },
+                },
+                'stat-fill': {
+                    '0%': { width: '0%' },
+                    '100%': { width: 'var(--stat-value)' },
+                },
             },
             animation: {
                 'slide-in': 'slide-in 0.3s ease-out',
                 'pulse-glow': 'pulse-glow 1.8s ease-in-out infinite',
+                'toast-in': 'toast-in 0.3s ease-out',
+                'toast-out': 'toast-out 0.25s ease-in forwards',
+                'stat-fill': 'stat-fill 0.8s ease-out forwards',
             },
         },
     },
